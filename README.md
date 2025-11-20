@@ -55,8 +55,9 @@ The whole thing uses strict **Guillotine Cuts**, making the final plan actually 
 
 ---
 
-## 📸 Screenshots
 
+
+<img width="1346" height="628" alt="image" src="https://github.com/user-attachments/assets/6917b2a7-b664-43bc-9cf6-558a9747cbe1" />
 
 
 ---
