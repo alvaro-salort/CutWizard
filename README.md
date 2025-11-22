@@ -43,7 +43,7 @@ Drop in your materials, add your parts, and boom — instant cut plan. Kerf incl
 
 ## 🧠 How the Algorithm Works
 
-CutOptimizer follows a simple but effective flow:
+CutWizard follows a simple but effective flow:
 
 1. Sort pieces from biggest to smallest (because size *does* matter here).  
 2. Try both orientations.  
