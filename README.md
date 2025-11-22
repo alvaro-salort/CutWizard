@@ -1,10 +1,10 @@
-# 🪚 CutOptimizer
+# 🪚 CutWizard
 
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38bdf8?style=flat-square&logo=tailwind-css)
 
-CutOptimizer is a lightweight tool that helps you figure out the smartest way to cut your boards, sheets, or panels.  
+CutWizard is a lightweight tool that helps you figure out the smartest way to cut your boards, sheets, or panels.  
 Drop in your materials, add your parts, and boom — instant cut plan. Kerf included, drama excluded.
 
 ---
