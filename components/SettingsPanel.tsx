@@ -131,9 +131,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
           </div>
 
           <div>
-            <label htmlFor="board-trim-margin" className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
-              Refilado / Borde (mm)
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label htmlFor="board-trim-margin" className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                Refilado / Borde (mm)
+              </label>
+              <input
+                type="checkbox"
+                id="enable-trim-margin"
+                name="enableTrimMargin"
+                aria-label="Activar refilado perimetral"
+                title="Activar o desactivar refilado perimetral"
+                checked={!!settings.enableTrimMargin}
+                onChange={(e) => onChange({ ...settings, enableTrimMargin: e.target.checked })}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4 cursor-pointer"
+              />
+            </div>
             <input
               id="board-trim-margin"
               name="trimMargin"
@@ -141,12 +153,20 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
               min="0"
               max="100"
               step="1"
+              disabled={!settings.enableTrimMargin}
               value={settings.trimMargin}
               onChange={(e) => handleInputChange('trimMargin', Number(e.target.value))}
-              className={`w-full px-3 py-2 rounded-lg border text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 transition-all ${darkMode ? 'bg-gray-700/60 border-gray-600 text-white' : 'bg-gray-50 border-gray-300 text-gray-900'
-                }`}
+              className={`w-full px-3 py-2 rounded-lg border text-sm font-semibold outline-none transition-all ${
+                !settings.enableTrimMargin
+                  ? 'opacity-40 bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 cursor-not-allowed text-gray-400 dark:text-gray-500'
+                  : darkMode
+                  ? 'bg-gray-700/60 border-gray-600 text-white focus:ring-2 focus:ring-blue-500'
+                  : 'bg-gray-50 border-gray-300 text-gray-900 focus:ring-2 focus:ring-blue-500'
+              }`}
             />
-            <span className="text-[10px] text-gray-400 mt-0.5 block">Margen perimetral a descartar</span>
+            <span className="text-[10px] text-gray-400 mt-0.5 block">
+              {settings.enableTrimMargin ? 'Margen perimetral a descartar' : 'Desactivado (sin refilado)'}
+            </span>
           </div>
         </div>
       </div>

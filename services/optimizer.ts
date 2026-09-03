@@ -75,13 +75,14 @@ const runSinglePass = (
   unplaced: Piece[];
   totalLinearCuts: number;
 } => {
-  const { boardWidth, boardHeight, kerf, trimMargin = 0 } = settings;
+  const { boardWidth, boardHeight, kerf, trimMargin = 0, enableTrimMargin } = settings;
+  const effectiveTrim = enableTrimMargin ? trimMargin : 0;
 
   // Área usable tras descontar el refilado perimetral en ambos lados
-  const usableX = trimMargin;
-  const usableY = trimMargin;
-  const usableW = Math.max(0, boardWidth - (trimMargin * 2));
-  const usableH = Math.max(0, boardHeight - (trimMargin * 2));
+  const usableX = effectiveTrim;
+  const usableY = effectiveTrim;
+  const usableW = Math.max(0, boardWidth - (effectiveTrim * 2));
+  const usableH = Math.max(0, boardHeight - (effectiveTrim * 2));
 
   // Clonar y ordenar piezas según la heurística
   const pieces = [...rawPieces].sort(sorter);
@@ -93,7 +94,7 @@ const runSinglePass = (
     id,
     width: boardWidth,
     height: boardHeight,
-    trimMargin,
+    trimMargin: effectiveTrim,
     placedPieces: [],
     freeRects: usableW > 0 && usableH > 0 ? [{ x: usableX, y: usableY, w: usableW, h: usableH }] : [],
     efficiency: 0,

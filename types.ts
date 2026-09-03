@@ -61,6 +61,7 @@ export interface Settings {
   boardHeight: number;
   kerf: number;
   trimMargin: number;
+  enableTrimMargin?: boolean;
 }
 
 export interface BoardPreset {

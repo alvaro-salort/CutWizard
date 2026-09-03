@@ -11,6 +11,7 @@ export const DEFAULT_SETTINGS: Settings = {
   boardHeight: 1220,
   kerf: 3,
   trimMargin: 10,
+  enableTrimMargin: false, // Desactivado por defecto
 };
 
 export const DEFAULT_PIECES: Piece[] = [
@@ -31,6 +32,7 @@ export const loadStoredSettings = (): Settings => {
       boardHeight: Number(parsed.boardHeight) || DEFAULT_SETTINGS.boardHeight,
       kerf: Number(parsed.kerf) ?? DEFAULT_SETTINGS.kerf,
       trimMargin: Number(parsed.trimMargin) ?? DEFAULT_SETTINGS.trimMargin,
+      enableTrimMargin: Boolean(parsed.enableTrimMargin),
     };
   } catch {
     return DEFAULT_SETTINGS;
