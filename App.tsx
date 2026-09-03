@@ -124,17 +124,17 @@ const App: React.FC = () => {
           <button
             onClick={handleOptimize}
             disabled={isOptimizing}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-5 rounded-2xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all transform active:scale-[0.99] flex items-center justify-center gap-2.5 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-5 rounded-2xl shadow-md hover:shadow-lg transition-all transform active:scale-[0.99] flex items-center justify-center gap-2.5 disabled:opacity-70 disabled:cursor-not-allowed text-sm"
           >
             {isOptimizing ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Calculando Multi-Pass...</span>
+                <span>Calculando...</span>
               </>
             ) : (
               <>
                 <Calculator className="w-5 h-5" />
-                <span>RECALCULAR OPTIMIZACIÓN</span>
+                <span>OPTIMIZAR CORTES</span>
               </>
             )}
           </button>
