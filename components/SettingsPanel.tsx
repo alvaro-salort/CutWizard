@@ -48,10 +48,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
 
       {/* Selector de Presets de Placas */}
       <div className="mb-4">
-        <label className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5">
+        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 flex items-center gap-1.5">
           <Layers className="w-3.5 h-3.5" />
           Presets Comerciales:
-        </label>
+        </span>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
           {BOARD_PRESETS.map((preset) => {
             const isSelected = settings.boardWidth === preset.width && settings.boardHeight === preset.height;
@@ -77,10 +77,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
       <div className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
+            <label htmlFor="board-width" className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
               Ancho Placa (mm)
             </label>
             <input
+              id="board-width"
+              name="boardWidth"
               type="number"
               min="100"
               step="1"
@@ -91,10 +93,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
+            <label htmlFor="board-height" className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
               Alto Placa (mm)
             </label>
             <input
+              id="board-height"
+              name="boardHeight"
               type="number"
               min="100"
               step="1"
@@ -108,10 +112,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
+            <label htmlFor="board-kerf" className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
               Kerf / Sierra (mm)
             </label>
             <input
+              id="board-kerf"
+              name="kerf"
               type="number"
               min="0"
               max="20"
@@ -125,10 +131,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({ settings, onChange
           </div>
 
           <div>
-            <label className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
+            <label htmlFor="board-trim-margin" className="text-xs font-medium text-gray-600 dark:text-gray-300 block mb-1">
               Refilado / Borde (mm)
             </label>
             <input
+              id="board-trim-margin"
+              name="trimMargin"
               type="number"
               min="0"
               max="100"

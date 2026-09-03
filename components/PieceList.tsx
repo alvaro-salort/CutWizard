@@ -111,6 +111,9 @@ export const PieceList: React.FC<PieceListProps> = ({
 
         <div className="flex items-center gap-1.5">
           <input
+            id="csv-upload-input"
+            name="csvUploadInput"
+            aria-label="Importar archivo CSV de despiece"
             type="file"
             ref={fileInputRef}
             onChange={handleFileUpload}
@@ -180,6 +183,9 @@ export const PieceList: React.FC<PieceListProps> = ({
                 {/* Nombre */}
                 <div className="col-span-4">
                   <input
+                    id={`piece-name-${p.id}`}
+                    name={`piece_name_${p.id}`}
+                    aria-label={`Nombre de la pieza #${idx + 1}`}
                     type="text"
                     value={p.name || ''}
                     placeholder={`Pieza #${idx + 1}`}
@@ -191,6 +197,9 @@ export const PieceList: React.FC<PieceListProps> = ({
                 {/* Ancho */}
                 <div className="col-span-2">
                   <input
+                    id={`piece-width-${p.id}`}
+                    name={`piece_width_${p.id}`}
+                    aria-label={`Ancho en milímetros de la pieza #${idx + 1}`}
                     type="number"
                     min="1"
                     value={p.width || ''}
@@ -203,6 +212,9 @@ export const PieceList: React.FC<PieceListProps> = ({
                 {/* Alto */}
                 <div className="col-span-2">
                   <input
+                    id={`piece-height-${p.id}`}
+                    name={`piece_height_${p.id}`}
+                    aria-label={`Alto en milímetros de la pieza #${idx + 1}`}
                     type="number"
                     min="1"
                     value={p.height || ''}
@@ -215,6 +227,9 @@ export const PieceList: React.FC<PieceListProps> = ({
                 {/* Cantidad */}
                 <div className="col-span-1">
                   <input
+                    id={`piece-quantity-${p.id}`}
+                    name={`piece_quantity_${p.id}`}
+                    aria-label={`Cantidad de unidades de la pieza #${idx + 1}`}
                     type="number"
                     min="1"
                     max="999"
@@ -229,6 +244,11 @@ export const PieceList: React.FC<PieceListProps> = ({
                   <button
                     type="button"
                     onClick={() => updateField(p.id, 'canRotate', !p.canRotate)}
+                    aria-label={
+                      p.canRotate
+                        ? `Rotación libre para pieza #${idx + 1}. Clic para fijar veta`
+                        : `Veta fija para pieza #${idx + 1}. Clic para permitir rotación`
+                    }
                     title={
                       p.canRotate
                         ? 'Rotación Libre: La pieza puede girar 90º para optimizar espacio'
@@ -249,6 +269,7 @@ export const PieceList: React.FC<PieceListProps> = ({
                   <button
                     type="button"
                     onClick={() => duplicatePiece(p.id)}
+                    aria-label={`Duplicar pieza #${idx + 1}`}
                     title="Duplicar pieza"
                     className="p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                   >
@@ -257,6 +278,7 @@ export const PieceList: React.FC<PieceListProps> = ({
                   <button
                     type="button"
                     onClick={() => removePiece(p.id)}
+                    aria-label={`Eliminar pieza #${idx + 1}`}
                     title="Eliminar pieza"
                     className="p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                   >
