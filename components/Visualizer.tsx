@@ -1,126 +1,370 @@
-import React from 'react';
-import { Board } from '../types';
+import React, { useState, useRef } from 'react';
+import { ZoomIn, ZoomOut, RotateCcw, Maximize2, RotateCw, Lock } from 'lucide-react';
+import { Board, PlacedPiece } from '../types';
 
 interface VisualizerProps {
   board: Board;
   kerf: number;
+  darkMode: boolean;
+  hoveredPieceId: string | null;
+  onHoverPiece: (id: string | null) => void;
 }
 
-export const Visualizer: React.FC<VisualizerProps> = ({ board, kerf }) => {
-  const { width, height, placedPieces, freeRects } = board;
+export const Visualizer: React.FC<VisualizerProps> = ({
+  board,
+  kerf,
+  darkMode,
+  hoveredPieceId,
+  onHoverPiece,
+}) => {
+  const { width, height, placedPieces, freeRects, trimMargin = 0 } = board;
+
+  // Estados para Zoom y Pan interactivo
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+  const [startPan, setStartPan] = useState({ x: 0, y: 0 });
+  const [activePiece, setActivePiece] = useState<PlacedPiece | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleZoomIn = () => setZoom((z) => Math.min(4, Math.round((z + 0.25) * 100) / 100));
+  const handleZoomOut = () => setZoom((z) => Math.max(0.5, Math.round((z - 0.25) * 100) / 100));
+  const handleResetZoom = () => {
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return; // Solo botón principal
+    setIsPanning(true);
+    setStartPan({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isPanning) return;
+    setPan({
+      x: e.clientX - startPan.x,
+      y: e.clientY - startPan.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
+  };
 
   const maxDim = Math.max(width, height);
-  const baseFontSize = Math.max(14, maxDim / 60); 
-  const strokeWidth = Math.max(1, maxDim / 1200);
+  const baseFontSize = Math.max(16, Math.round(maxDim / 55));
+  const strokeWidth = Math.max(1, Math.round(maxDim / 1000));
 
-  const renderDimensions = (x: number, y: number, w: number, h: number, color: string) => {
-    const showW = w > baseFontSize * 1.5;
-    const showH = h > baseFontSize * 1.5;
-    
+  // Renderizador de cotas numéricas
+  const renderDimensions = (x: number, y: number, w: number, h: number, isDarkPiece: boolean) => {
+    const showW = w > baseFontSize * 2;
+    const showH = h > baseFontSize * 2;
     if (!showW && !showH) return null;
 
+    const textColor = darkMode ? '#f8fafc' : '#0f172a';
+    const bgBadge = darkMode ? 'rgba(15, 23, 42, 0.75)' : 'rgba(255, 255, 255, 0.85)';
+
     return (
-      <>
+      <g className="pointer-events-none select-none">
         {showW && (
-          <text
-            x={x + w / 2}
-            y={y + baseFontSize} 
-            textAnchor="middle"
-            fontSize={baseFontSize}
-            fontWeight="500"
-            fill={color}
-            style={{ pointerEvents: 'none', userSelect: 'none' }}
-          >
-            {Math.round(w).toLocaleString()}
-          </text>
+          <g>
+            <rect
+              x={x + w / 2 - (String(Math.round(w)).length * baseFontSize * 0.32)}
+              y={y + baseFontSize * 0.3}
+              width={String(Math.round(w)).length * baseFontSize * 0.64}
+              height={baseFontSize * 1.1}
+              rx={4}
+              fill={bgBadge}
+            />
+            <text
+              x={x + w / 2}
+              y={y + baseFontSize * 1.1}
+              textAnchor="middle"
+              fontSize={baseFontSize * 0.85}
+              fontWeight="600"
+              fill={textColor}
+            >
+              {Math.round(w)}
+            </text>
+          </g>
         )}
         {showH && (
-          <text
-            x={x + baseFontSize * 0.8}
-            y={y + h / 2}
-            textAnchor="middle"
-            fontSize={baseFontSize}
-            fontWeight="500"
-            fill={color}
-            transform={`rotate(-90, ${x + baseFontSize * 0.8}, ${y + h / 2})`}
-            style={{ pointerEvents: 'none', userSelect: 'none' }}
-          >
-            {Math.round(h).toLocaleString()}
-          </text>
+          <g>
+            <rect
+              x={x + baseFontSize * 0.2}
+              y={y + h / 2 - (String(Math.round(h)).length * baseFontSize * 0.32)}
+              width={baseFontSize * 1.1}
+              height={String(Math.round(h)).length * baseFontSize * 0.64}
+              rx={4}
+              fill={bgBadge}
+            />
+            <text
+              x={x + baseFontSize * 0.75}
+              y={y + h / 2}
+              textAnchor="middle"
+              fontSize={baseFontSize * 0.85}
+              fontWeight="600"
+              fill={textColor}
+              transform={`rotate(-90, ${x + baseFontSize * 0.75}, ${y + h / 2})`}
+            >
+              {Math.round(h)}
+            </text>
+          </g>
         )}
-      </>
+      </g>
     );
   };
 
   return (
-    <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 print:break-inside-avoid">
-      <div className="flex justify-between items-center mb-3 border-b border-gray-100 pb-2">
-        <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-          Placa {board.id}
-        </h3>
-        <div className="flex items-center gap-3">
-             <span className="flex items-center gap-1.5 text-xs text-gray-500">
-                <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                {board.efficiency.toFixed(1)}% Uso
-             </span>
-             <span className="flex items-center gap-1.5 text-xs text-gray-500">
-                <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-                {board.waste.toFixed(1)}% Libre
-             </span>
-             <span className="text-xs font-mono text-gray-400 bg-gray-50 px-2 py-1 rounded ml-2">
-              {width} x {height}
+    <div
+      className={`w-full rounded-2xl shadow-sm border p-4 mb-6 transition-colors duration-200 print:shadow-none print:border-gray-800 ${
+        darkMode ? 'bg-gray-800/90 border-gray-700/80 text-gray-100' : 'bg-white border-gray-200 text-gray-800'
+      }`}
+    >
+      {/* Barra superior de placa */}
+      <div className="flex flex-wrap justify-between items-center mb-3 pb-2 border-b border-gray-100 dark:border-gray-700 gap-2">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">
+            Tablero #{board.id}
+          </h3>
+          <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-750 text-gray-600 dark:text-gray-300">
+            {width} × {height} mm
+          </span>
+          {trimMargin > 0 && (
+            <span className="text-[11px] px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+              Refilado: {trimMargin} mm
             </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-green-600 dark:text-green-400">
+            <span className="w-2 h-2 rounded-full bg-green-500"></span>
+            {board.efficiency.toFixed(1)}% Usado
+          </span>
+          <span className="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+            <span className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+            {board.waste.toFixed(1)}% Libre
+          </span>
         </div>
       </div>
-      
-      <div className="relative w-full bg-white rounded border border-gray-200 overflow-hidden flex items-center justify-center print:border-gray-800">
-        <svg
-          viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-auto block"
-          style={{ maxHeight: '600px', fontFamily: 'sans-serif' }}
+
+      {/* Contenedor del Canvas SVG con Zoom y Pan */}
+      <div
+        ref={containerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        className={`relative w-full rounded-xl border overflow-hidden select-none cursor-grab active:cursor-grabbing transition-colors duration-200 ${
+          darkMode ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'
+        }`}
+        style={{ minHeight: '420px', maxHeight: '680px' }}
+      >
+        {/* Controles de Zoom Flotantes */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 p-1 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-xl shadow-md border border-gray-200 dark:border-gray-700 no-print">
+          <button
+            onClick={handleZoomIn}
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+            title="Acercar (+)"
+          >
+            <ZoomIn className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleZoomOut}
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+            title="Alejar (-)"
+          >
+            <ZoomOut className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleResetZoom}
+            className="px-2 py-1 text-[11px] font-mono font-bold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+            title="Reiniciar Vista"
+          >
+            {Math.round(zoom * 100)}%
+          </button>
+          <button
+            onClick={handleResetZoom}
+            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 transition-colors"
+            title="Centrar"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        {/* Tooltip informativo al pasar el cursor sobre una pieza */}
+        {activePiece && (
+          <div className="absolute bottom-3 left-3 z-10 p-2.5 bg-gray-900/95 text-white text-xs rounded-xl shadow-lg border border-gray-700 backdrop-blur-md pointer-events-none flex items-center gap-3">
+            <div>
+              <div className="font-bold text-blue-300">{activePiece.name || activePiece.label}</div>
+              <div className="text-gray-300 text-[11px]">
+                Medidas: <strong>{activePiece.w} × {activePiece.h} mm</strong> | Pos: ({Math.round(activePiece.x)}, {Math.round(activePiece.y)})
+              </div>
+            </div>
+            {activePiece.isRotated && (
+              <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                <RotateCw className="w-3 h-3" /> Rotada 90º
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Canvas SVG transformable */}
+        <div
+          style={{
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+            transformOrigin: 'center center',
+            transition: isPanning ? 'none' : 'transform 0.15s ease-out',
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+          }}
         >
-          {}
-          <rect x="0" y="0" width={width} height={height} fill="#ffffff" />
+          <svg
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full h-auto block drop-shadow-xl"
+            style={{ maxHeight: '580px', fontFamily: 'Inter, system-ui, sans-serif' }}
+          >
+            <defs>
+              {/* Patrón sutil para retazos / desperdicio */}
+              <pattern
+                id={`waste-pattern-${board.id}`}
+                width="20"
+                height="20"
+                patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)"
+              >
+                <line
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="20"
+                  stroke={darkMode ? '#334155' : '#e2e8f0'}
+                  strokeWidth="1.5"
+                />
+              </pattern>
+            </defs>
 
-          {}
-          {freeRects.map((rect, i) => {
-             if (rect.w < 5 || rect.h < 5) return null;
-             return (
-               <g key={`waste-${i}`}>
-                 <rect
-                   x={rect.x}
-                   y={rect.y}
-                   width={rect.w}
-                   height={rect.h}
-                   fill="#f3f4f6" 
-                   stroke="#e5e7eb"
-                   strokeWidth={strokeWidth}
-                 />
-                 {renderDimensions(rect.x, rect.y, rect.w, rect.h, "#9ca3af")}
-               </g>
-             );
-          })}
+            {/* Fondo del Tablero */}
+            <rect
+              x="0"
+              y="0"
+              width={width}
+              height={height}
+              fill={darkMode ? '#1e293b' : '#ffffff'}
+              stroke={darkMode ? '#475569' : '#cbd5e1'}
+              strokeWidth={strokeWidth * 2}
+              rx={2}
+            />
 
-          {}
-          {placedPieces.map((p) => (
-            <g key={p.id}>
+            {/* Margen de refilado perimetral si existe */}
+            {trimMargin > 0 && (
               <rect
-                x={p.x}
-                y={p.y}
-                width={p.w}
-                height={p.h}
-                fill={p.color}
-                stroke="#374151" 
+                x={trimMargin}
+                y={trimMargin}
+                width={Math.max(0, width - trimMargin * 2)}
+                height={Math.max(0, height - trimMargin * 2)}
+                fill="none"
+                stroke={darkMode ? '#64748b' : '#94a3b8'}
                 strokeWidth={strokeWidth}
-                opacity="0.9"
+                strokeDasharray={`${strokeWidth * 4} ${strokeWidth * 3}`}
               />
-               {renderDimensions(p.x, p.y, p.w, p.h, "#1f2937")}
-            </g>
-          ))}
-          
-          {}
-          <rect x="0" y="0" width={width} height={height} fill="none" stroke="#d1d5db" strokeWidth={strokeWidth * 2} />
-        </svg>
+            )}
+
+            {/* Zonas Libres / Desperdicio */}
+            {freeRects.map((rect, i) => {
+              if (rect.w < 5 || rect.h < 5) return null;
+              const isUseful = rect.w >= 300 && rect.h >= 300;
+
+              return (
+                <g key={`waste-${i}`}>
+                  <rect
+                    x={rect.x}
+                    y={rect.y}
+                    width={rect.w}
+                    height={rect.h}
+                    fill={isUseful ? (darkMode ? '#132e2b' : '#f0fdf4') : `url(#waste-pattern-${board.id})`}
+                    stroke={isUseful ? '#10b981' : darkMode ? '#334155' : '#cbd5e1'}
+                    strokeWidth={strokeWidth}
+                    opacity={isUseful ? 0.9 : 0.6}
+                  />
+                  {renderDimensions(rect.x, rect.y, rect.w, rect.h, false)}
+                </g>
+              );
+            })}
+
+            {/* Piezas Colocadas */}
+            {placedPieces.map((p) => {
+              const isHighlighted = hoveredPieceId === p.originalId;
+
+              return (
+                <g
+                  key={p.id}
+                  onMouseEnter={() => {
+                    setActivePiece(p);
+                    onHoverPiece(p.originalId);
+                  }}
+                  onMouseLeave={() => {
+                    setActivePiece(null);
+                    onHoverPiece(null);
+                  }}
+                  className="cursor-pointer transition-opacity"
+                >
+                  <rect
+                    x={p.x}
+                    y={p.y}
+                    width={p.w}
+                    height={p.h}
+                    fill={p.color}
+                    stroke={isHighlighted ? '#2563eb' : darkMode ? '#0f172a' : '#1e293b'}
+                    strokeWidth={isHighlighted ? strokeWidth * 4 : strokeWidth}
+                    opacity={isHighlighted ? 1 : 0.92}
+                    rx={2}
+                    style={{
+                      filter: isHighlighted ? 'drop-shadow(0 0 10px rgba(37,99,235,0.8))' : 'none',
+                    }}
+                  />
+
+                  {/* Nombre y medidas */}
+                  {renderDimensions(p.x, p.y, p.w, p.h, true)}
+
+                  {/* Indicador de Rotación en la pieza */}
+                  {p.isRotated && p.w > baseFontSize * 2 && p.h > baseFontSize * 2 && (
+                    <text
+                      x={p.x + p.w - baseFontSize * 1.2}
+                      y={p.y + baseFontSize * 1.2}
+                      fontSize={baseFontSize * 0.75}
+                      fill={darkMode ? '#ffffff' : '#000000'}
+                      opacity={0.65}
+                      textAnchor="middle"
+                      className="pointer-events-none select-none font-bold"
+                    >
+                      ⟳
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+
+            {/* Borde exterior del tablero */}
+            <rect
+              x="0"
+              y="0"
+              width={width}
+              height={height}
+              fill="none"
+              stroke={darkMode ? '#94a3b8' : '#64748b'}
+              strokeWidth={strokeWidth * 2.5}
+            />
+          </svg>
+        </div>
       </div>
     </div>
   );
