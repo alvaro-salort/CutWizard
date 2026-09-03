@@ -32,8 +32,9 @@ export const StatsSummary: React.FC<StatsSummaryProps> = ({ result, darkMode, on
     >
       {/* Barra superior de título y exportaciones */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
-        <div>
-          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-gray-600 dark:text-gray-300">
             Métricas de Rendimiento
           </h2>
         </div>
@@ -59,71 +60,71 @@ export const StatsSummary: React.FC<StatsSummaryProps> = ({ result, darkMode, on
         </div>
       </div>
 
-      {/* Grid de Métricas */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
+      {/* Grid de Métricas 3x2 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
         {/* Aprovechamiento */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-green-50/50 border-green-100'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-green-700 dark:text-green-400 font-medium mb-1 min-w-0">
-            <TrendingUp className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="truncate" title="Aprovechamiento">Aprovechamiento</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-green-950/20 border-green-800/60' : 'bg-green-50/70 border-green-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-semibold text-green-700 dark:text-green-300 mb-2">
+            <TrendingUp className="w-4 h-4 flex-shrink-0" />
+            <span>Aprovechamiento</span>
           </div>
-          <div className="text-2xl font-black text-green-600 dark:text-green-400 truncate">
+          <div className="text-3xl font-extrabold text-green-700 dark:text-green-400">
             {result.totalEfficiency.toFixed(1)}%
           </div>
         </div>
 
         {/* Desperdicio */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-amber-50/50 border-amber-100'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-amber-700 dark:text-amber-400 font-medium mb-1 min-w-0">
-            <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="truncate" title="Desperdicio Total">Desperdicio Total</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-amber-950/20 border-amber-800/60' : 'bg-amber-50/70 border-amber-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-semibold text-amber-700 dark:text-amber-300 mb-2">
+            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+            <span>Desperdicio Total</span>
           </div>
-          <div className="text-2xl font-black text-amber-600 dark:text-amber-400 truncate">
+          <div className="text-3xl font-extrabold text-amber-600 dark:text-amber-400">
             {result.totalWaste.toFixed(1)}%
           </div>
         </div>
 
         {/* Tableros */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-blue-50/50 border-blue-100'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-blue-700 dark:text-blue-400 font-medium mb-1 min-w-0">
-            <Layers className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="truncate" title="Tableros">Tableros</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-blue-950/20 border-blue-800/60' : 'bg-blue-50/70 border-blue-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-semibold text-blue-700 dark:text-blue-300 mb-2">
+            <Layers className="w-4 h-4 flex-shrink-0" />
+            <span>Tableros</span>
           </div>
-          <div className="text-2xl font-black text-blue-600 dark:text-blue-400 truncate">
+          <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
             {result.totalBoards}
           </div>
         </div>
 
         {/* Piezas Colocadas */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 min-w-0">
-            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
-            <span className="truncate" title="Piezas Cortadas">Piezas Cortadas</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50/80 border-gray-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
+            <CheckCircle2 className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+            <span>Piezas Cortadas</span>
           </div>
-          <div className="text-2xl font-black text-gray-800 dark:text-gray-200 truncate">
+          <div className="text-3xl font-extrabold text-gray-800 dark:text-gray-100">
             {result.totalPartsCount}
           </div>
         </div>
 
         {/* Metros de Corte */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 min-w-0">
-            <Ruler className="w-3.5 h-3.5 text-purple-500 flex-shrink-0" />
-            <span className="truncate" title="Corte Lineal">Corte Lineal</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50/80 border-gray-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
+            <Ruler className="w-4 h-4 text-purple-500 flex-shrink-0" />
+            <span>Corte Lineal</span>
           </div>
-          <div className="text-2xl font-black text-purple-600 dark:text-purple-400 truncate">
-            {result.totalLinearCuts} <span className="text-xs font-normal">m</span>
+          <div className="text-3xl font-extrabold text-purple-600 dark:text-purple-400">
+            {result.totalLinearCuts} <span className="text-sm font-semibold">m</span>
           </div>
         </div>
 
         {/* Retazos Útiles */}
-        <div className={`p-3 rounded-xl border min-w-0 overflow-hidden ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 min-w-0">
-            <Sparkles className="w-3.5 h-3.5 text-teal-500 flex-shrink-0" />
-            <span className="truncate" title="Retazos Útiles">Retazos Útiles</span>
+        <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50/80 border-gray-200'}`}>
+          <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
+            <Sparkles className="w-4 h-4 text-teal-500 flex-shrink-0" />
+            <span>Retazos Útiles</span>
           </div>
-          <div className="text-2xl font-black text-teal-600 dark:text-teal-400 truncate">
-            {usefulOffcutsTotal} <span className="text-xs font-normal">piezas</span>
+          <div className="text-3xl font-extrabold text-teal-600 dark:text-teal-400">
+            {usefulOffcutsTotal} <span className="text-sm font-semibold">piezas</span>
           </div>
         </div>
       </div>
