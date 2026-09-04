@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, Download, TrendingUp, AlertTriangle, Layers, Ruler, Sparkles, CheckCircle2 } from 'lucide-react';
+import { FileText, Download, TrendingUp, AlertTriangle, Layers, Ruler, Sparkles, CheckCircle2, HelpCircle } from 'lucide-react';
 import { OptimizationResult } from '../types';
 import { exportOptimizationCSV } from '../services/csvHelper';
 
@@ -75,9 +75,16 @@ export const StatsSummary: React.FC<StatsSummaryProps> = ({ result, darkMode, on
 
         {/* Desperdicio */}
         <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-amber-950/20 border-amber-800/60' : 'bg-amber-50/70 border-amber-200'}`}>
-          <div className="flex items-center gap-2 text-xs font-semibold text-amber-700 dark:text-amber-300 mb-2">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-300 mb-2">
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
             <span>Desperdicio Total</span>
+            <span
+              className="cursor-help text-amber-700/60 dark:text-amber-300/60 hover:text-amber-800 dark:hover:text-amber-200 transition-colors p-0.5 inline-flex items-center"
+              title="Superficie del tablero no aprovechada: incluye los recortes sobrantes y el espesor consumido por el corte de la sierra (kerf)."
+              aria-label="Información sobre Desperdicio Total"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+            </span>
           </div>
           <div className="text-3xl font-extrabold text-amber-600 dark:text-amber-400">
             {result.totalWaste.toFixed(1)}%
@@ -108,9 +115,16 @@ export const StatsSummary: React.FC<StatsSummaryProps> = ({ result, darkMode, on
 
         {/* Metros de Corte */}
         <div className={`p-4 rounded-2xl border transition-all ${darkMode ? 'bg-gray-750/50 border-gray-700' : 'bg-gray-50/80 border-gray-200'}`}>
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 mb-2">
             <Ruler className="w-4 h-4 text-purple-500 flex-shrink-0" />
             <span>Corte Lineal</span>
+            <span
+              className="cursor-help text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors p-0.5 inline-flex items-center"
+              title="Longitud total acumulada de todos los cortes que realiza la sierra para obtener las piezas."
+              aria-label="Información sobre Corte Lineal"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+            </span>
           </div>
           <div className="text-3xl font-extrabold text-purple-600 dark:text-purple-400">
             {result.totalLinearCuts} <span className="text-sm font-semibold">m</span>
