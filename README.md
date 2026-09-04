@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="public/favicon.svg" width="72" height="72" alt="CutWizard Logo" />
+  <img width="1200" height="480" alt="banner" src="https://github.com/user-attachments/assets/afb3b7ee-e82a-4f6c-bb31-af1afa31eb9e" />
 </p>
+
 
 # CutWizard 
 
@@ -101,7 +102,8 @@ CutWizard follows a simple, smart, and realistic flow:
 
 ---
 
-<img width="1346" height="628" alt="image" src="https://github.com/user-attachments/assets/6917b2a7-b664-43bc-9cf6-558a9747cbe1" />
+<img width="1366" height="1082" alt="image" src="https://github.com/user-attachments/assets/e4559496-186e-4d7a-8688-860a550d7851" />
+
 
 ---
 
