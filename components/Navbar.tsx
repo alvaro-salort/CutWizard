@@ -1,5 +1,5 @@
 import React from 'react';
-import { Axe, Sun, Moon } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 
 interface NavbarProps {
   darkMode: boolean;
@@ -14,9 +14,11 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, onToggleDarkMode }) =>
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-600 text-white rounded-xl shadow-sm">
-            <Axe className="w-5 h-5" />
-          </div>
+          <img
+            src="/favicon.svg"
+            alt="CutWizard Logo"
+            className="w-10 h-10 object-contain select-none"
+          />
           <div>
             <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
               CutWizard
