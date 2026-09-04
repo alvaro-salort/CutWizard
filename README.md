@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/favicon.svg" width="72" height="72" alt="CutWizard Logo" />
+</p>
+
 # CutWizard 
 
 ![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
@@ -22,11 +26,17 @@ Drop in your materials, add your parts, and boom — instant cut plan. Kerf incl
 * **🪵 Grain Direction Control (Wood Lovers Rejoice)**  
   Because rotating a wood-grain drawer face sideways is a woodworking crime. Lock orientation per piece so the grain stays continuous across your doors and tops.
 
-* **📐 Trim / Edge Margin Awareness**  
-  Factory edges get beat up on delivery trucks. Set a trim margin (e.g., 10 mm) to square up the board before placing your actual parts.
+* **📐 Toggleable Trim / Perimeter Margin**  
+  Factory edges get beat up on delivery trucks. Toggle an optional trim margin (e.g., 10 mm) with a single click to square up the board before placing your actual parts.
 
 * **🔍 Interactive SVG Visualizer (Zoom & Pan)**  
   Inspect 2.8-meter boards with ease. Zoom in, pan around with your mouse, check exact piece coordinates, and admire your layout without squinting.
+
+* **🖨️ Workshop-Ready PDF & Print Mode**  
+  One-click print button formatted specifically for paper and clipboard. Strips away browser chrome, keeps diagrams high-contrast, and delivers a clean cutting ticket straight to the table saw.
+
+* **📊 Live Metrics & Yield Dashboard**  
+  A clean 3×2 KPI card layout showing total yield, total waste, boards required, cut count, linear cut meters, and usable offcuts — with interactive explanatory tooltips right on the cards.
 
 * **🌗 Real Dark Mode**  
   Day shift, night shift, or 2 AM garage workshop madness. The board canvas and UI adjust dynamically so your eyes don't burn.
